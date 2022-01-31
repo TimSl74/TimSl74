@@ -9,7 +9,7 @@ bot = telebot.TeleBot("5194896265:AAFAOfT7VjKkbkM_aMs4ik7Ylsb9vzF2WFQ", parse_mo
 def send_welcome(message):
 	bot.reply_to(message, "I'm ready!")
 
-# setting the URL you want to monitor
+#Выбор сайта, за которым надо следить
 url = Request('https://habr.com/ru/all/', 
               headers={'User-Agent': 'Mozilla/5.0'})
   
@@ -17,7 +17,7 @@ url = Request('https://habr.com/ru/all/',
 # content of the website and store it in a var
 response = urlopen(url).read()
   
-# to create the initial hash
+# копирует изначальный хэш сайта
 currentHash = hashlib.sha224(response).hexdigest()
 print("running")
 time.sleep(10)
@@ -29,22 +29,22 @@ while True:
         # create a hash
         currentHash = hashlib.sha224(response).hexdigest()
           
-        # wait for 30 seconds
+        # таймер 30 секунд
         time.sleep(30)
           
         # perform the get request
         response = urlopen(url).read()
           
-        # create a new hash
+        # новый хэш
         newHash = hashlib.sha224(response).hexdigest()
   
-        # check if new hash is same as the previous hash
+        # есть новый хэш равен старому, то работает дальше
         if newHash == currentHash:
             continue
   
-        # if something changed in the hashes
+        # если есть отличия в хэше:
         else:
-            # notify
+            # бот пишет письмо
             bot.send_message (369526576, "Есть изменения на сайте")
   
             # again read the website
@@ -53,11 +53,11 @@ while True:
             # create a hash
             currentHash = hashlib.sha224(response).hexdigest()
   
-            # wait for 30 seconds
+            # снова ждет 30 секунд
             time.sleep(30)
             continue
               
-    # To handle exceptions
+    # что то связанное с падениями/ошибками
     except Exception as e:
         bot.send_message (369526576, "error")
 		
